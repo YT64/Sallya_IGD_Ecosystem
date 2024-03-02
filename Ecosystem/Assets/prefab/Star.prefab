@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.47, y: 1.17, z: 0}
-  m_LocalScale: {x: 0.61109, y: 0.61109, z: 0.61109}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -207,13 +207,13 @@ Rigidbody2D:
   m_GameObject: {fileID: 8436561618013711381}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 3.47
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0acc027f485de814ab20443ad967ca0c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -222,7 +222,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &4743859631806948466
 MonoBehaviour:
@@ -236,3 +236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aca8fd2c5b0a2d4da1d695f8879f985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rest: {fileID: 21300000, guid: 535b9b0819aac8042b99261d6f5d6b6a, type: 3}
+  attack: {fileID: 21300000, guid: d6d59267eac97944ba18510ee7fda0ca, type: 3}
+  hurt: {fileID: 21300000, guid: cb6ddb763f2c43840a28be9d8965d600, type: 3}

@@ -114,7 +114,7 @@ public class Cthulhu : MonoBehaviour
                     StartState(AIState.StateSorry);
                 }
 
-                if (Time.time - angryTimestamp > 4.0f)
+                if (Time.time - angryTimestamp > 2.0f)
                 {
                     StartState(AIState.StateRest);
                 }

@@ -7,14 +7,13 @@ public class Star : MonoBehaviour
     public Sprite rest;
     public Sprite attack;
     public Sprite hurt;
-    public float accel;
-    public float maxSpeed;
     private Rigidbody2D rb;
+    private PolygonCollider2D starCollider;
 
-    private int facing = 1;
     private AIState currentState = AIState.StateRest;
-    private float angryTimestamp;
+    private float restTimestamp;
     private string collidedObjectTag;
+    
 
     public enum AIState
     {
@@ -38,6 +37,7 @@ public class Star : MonoBehaviour
     {
         StartState(currentState);
         rb = this.GetComponent<Rigidbody2D>();
+        starCollider = GetComponent<PolygonCollider2D>();
     }
 
     private void Update()
@@ -54,30 +54,27 @@ public class Star : MonoBehaviour
             case AIState.StateRest:
                 //your code here
                 ChangeSprite(rest);
-                print("Cthulhu");
-                if (facing != -1)
-                {
-                    facing = -(facing);
-                }
+
+                print("Color out of space");
+                restTimestamp = Time.time;
+
 
                 break;
             case AIState.StateAttack:
                 //your code here
                 ChangeSprite(attack);
-                print("sorry!");
-                Invoke("Despawn", 3.0f);
+                print("prey!");
+                UpdateColliderPoints();
 
 
                 break;
             case AIState.StateHurt:
                 //your code here
                 ChangeSprite(hurt);
-                print("angry!");
-                if (facing != 1)
-                {
-                    facing = -(facing);
-                }
-                angryTimestamp = Time.time;
+                print("hurt!");
+                UpdateColliderPoints();
+                Invoke("Despawn", 3.0f);
+                
                 break;
         }
     }
@@ -87,37 +84,38 @@ public class Star : MonoBehaviour
         {
             case AIState.StateRest:
                 //your code here
-                fly();
-                if (collidedObjectTag == "fish")
+                if (collidedObjectTag == "cthulhu")
                 {
-                    StartState(AIState.StateSorry);
+                    StartState(AIState.StateHurt);
                 }
 
-                if (collidedObjectTag == "star")
+                else if (Time.time - restTimestamp > 3.0f)
                 {
-                    StartState(AIState.StateAngry);
+                    StartState(AIState.StateAttack);StartState(AIState.StateAttack);
                 }
 
                 break;
-            case AIState.StateSorry:
+            case AIState.StateAttack:
                 //your code here
-                ChangeSprite(sorry);
 
-                break;
-            case AIState.StateAngry:
-                //your code here
-                accel = 4;
-                fly();
-
-                if (collidedObjectTag == "fish")
+                if (collidedObjectTag == "cthulhu")
                 {
-                    StartState(AIState.StateSorry);
+                    StartState(AIState.StateHurt);
                 }
 
-                if (Time.time - angryTimestamp > 4.0f)
+                else if (collidedObjectTag == "fish")
                 {
+                    print("Hit fish!");
+                    Spawn();
                     StartState(AIState.StateRest);
                 }
+
+
+                break;
+            case AIState.StateHurt:
+                //your code here
+                
+
 
                 break;
         }
@@ -131,24 +129,55 @@ public class Star : MonoBehaviour
                 //your code here
 
                 break;
-            case AIState.StateSorry:
+            case AIState.StateAttack:
                 //your code here
 
                 break;
-            case AIState.StateAngry:
+            case AIState.StateHurt:
                 //your code here
-                accel = 1;
+
                 break;
         }
     }
-    private void fly()
-    {
-        rb.AddForce(Vector2.right * facing * accel * (maxSpeed - Mathf.Abs(rb.velocity.x)));
-    }
+
 
     private void ChangeSprite(Sprite newSprite)
     {
         this.GetComponent<SpriteRenderer>().sprite = newSprite;
+    }
+
+    private void UpdateColliderPoints()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null && starCollider != null)
+        {
+            Vector2[] spriteBoundsPoints = GetSpriteBoundsPoints(spriteRenderer.sprite.bounds);
+
+            // Set the PolygonCollider2D points
+            starCollider.SetPath(0, spriteBoundsPoints);
+        }
+
+    }
+
+    private Vector2[] GetSpriteBoundsPoints(Bounds bounds)
+    {
+        Vector2[] points = new Vector2[4];
+
+        points[0] = new Vector2(bounds.min.x, bounds.min.y);
+        points[1] = new Vector2(bounds.min.x, bounds.max.y);
+        points[2] = new Vector2(bounds.max.x, bounds.max.y);
+        points[3] = new Vector2(bounds.max.x, bounds.min.y);
+
+        return points;
+    }
+
+    private void Spawn()
+    {
+        float spawnY = Random.Range(0.5f, 0.6f);
+        float spawnX = Random.Range(0.08f, 0.8f);
+        Vector2 spawnPosition = Camera.main.ViewportToWorldPoint(new Vector2(spawnX, spawnY));
+        Instantiate(gameObject, spawnPosition, Quaternion.identity);
     }
 
     private void Despawn()

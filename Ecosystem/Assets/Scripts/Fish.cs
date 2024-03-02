@@ -111,6 +111,7 @@ public class Fish : MonoBehaviour
                     StartState(AIState.StateScared);
                 }
 
+
                 break;
             case AIState.StateGotHit:
                 //your code here

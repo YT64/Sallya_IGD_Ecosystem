@@ -13,8 +13,8 @@ public class Gamemanager : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            float spawnY = Random.Range(0.5f, 0.8f);
-            float spawnX = Random.Range(0.08f, 0.8f);
+            float spawnY = Random.Range(0.6f, 0.8f);
+            float spawnX = Random.Range(0.3f, 0.8f);
             Vector2 spawnPosition = Camera.main.ViewportToWorldPoint(new Vector2(spawnX, spawnY));
 
             Instantiate(prefab, spawnPosition, Quaternion.identity);
